@@ -12,7 +12,7 @@ const interests = require('../schemas/interest.schema')
 exports.home = async function (req, res) {
     try {
         homeData.find({}, function (er, data) {
-            if (!err) {
+            if (!er) {
                 res.send({
                     "message": "ok", "status": 1, "data": data
                 })
@@ -36,11 +36,10 @@ exports.interest = async function (req, res) {
     try {
         const { imageId, interest } = req.body;
         const userId = req.userId
-        var data = { userId: userId, imageId: imageId, interest: interest }
+        var data = { userId: ObjectId(userId), imageId: ObjectId(imageId), interest: interest }
         interests.findOneAndUpdate(data, { $inc: { count: 1 } }, { upsert: true }, function (er, data) {
-
             if (!er) {
-                res.send({ "message": "ok", "status": 1, "data": data })
+                res.send({ "message": "ok", "status": 1, "data": {} })
             } else {
                 res.send({ "message": "failed", "status": -1, "data": {} })
             }
@@ -65,3 +64,62 @@ exports.interest = async function (req, res) {
 
 
 
+exports.history = async function (req, res) {
+    try {
+         const userId = req.userId
+         interests.aggregate([
+                {
+                    "$match": {"userId":ObjectId(userId)}
+                },
+             {
+              "$lookup": {
+                "from": "homes", // collection name in db
+                "localField": "imageId",
+                "foreignField": "_id",
+                "as": "history"
+             }
+           },{
+               "$project":{
+                   "_id":0,
+                   "interest":1,
+                   "count":1,
+                   "history.imageName":1,
+                   "history.imageUrl":1,
+                   "history.createdAt":1
+               }
+           },
+           {
+            "$unwind": {
+                "path": "$history",
+                "preserveNullAndEmptyArrays": true
+            }
+        },
+      ]).exec(function(err, data) {
+                if (!err) {
+                    res.send({
+                        "message": "ok", "status": 1, "data": data
+                    })
+                }else{
+                  res.send({
+                    "message": "failed", "status": -1, "data": {}
+                  })
+                }
+        });
+
+
+        // homeData.find({}, function (er, data) {
+        //     if (!er) {
+        //         res.send({
+        //             "message": "ok", "status": 1, "data": data
+        //         })
+        //     } else {
+        //         res.send({
+        //             "message": "failed", "status": -1, "data": {}
+        //         })
+        //     }
+        // })
+
+    } catch (e) {
+        res.send({ "message": "Internal Server Error", "status": 500 })
+    }
+}
