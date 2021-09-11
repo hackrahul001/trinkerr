@@ -20,19 +20,21 @@ exports.registerUser = async function (req,res) {
                     //console.log.log(err)
                     if (!err) {
                         res.send({
-                            "message": "Otp sent successfully", "status": 1, "data": {}
+                            "error":false,"message": "Otp sent successfully", "status": 1, "data": {}
                         })
                     } else {
-                        res.send({ "message": "some error occured", "status": -1, "data": {} })
+                        res.send({ "error":true,"message": "some error occured", "status": 500, "data": {} })
                     }
+                
                 })
             } else {
-                res.send({ "message": "user found with same mobile number", "status": -1, "data": {} })
+                res.send({ "error":false,"message": "user found with same mobile number", "status": -1, "data": {} })
             }
         })
     } catch (e) {
-        res.send({ "message": "Internal Server Error", "status": 500 })
+        res.send({ "error":true,"message": "Internal Server Error", "status": 500 })
     }
+    return;
 }
 
 
@@ -49,25 +51,26 @@ exports.otpVerification = async (req, res) => {
                             var access = 'auth';
                             var token = jwt.sign({ userId: doc[0]._id, access }, SECRET_KEY).toString();
                             res.header('x-auth', token).send({
+                                "error":false,
                                 "message": "otp verified successfully",
                                 "status": 1,
                                 "data": {userName : doc[0].userName}
                             })
                         } else {
-                            res.send({ "message": "some error occured", "status": -1, "data": {} })
+                            res.send({ "error":true,"message": "some error occured", "status": 500, "data": {} })
                         }
                     });
                 } else {
-                    res.send({ status: -1, message: "otp is not valid", data: {} })
+                    res.send({"error":false, "status": -1, "message": "otp is not valid", "data": {} })
                 }
             } else {
-                res.send({ status: -1, message: "user not found", data: {} })
+                res.send({ "error":false,"status": -1, "message": "user not found", "data": {} })
             }
         })
     } catch (e) {
-        res.send({ "message": "Internal Server Error", "status": 500 })
+        res.send({ "error":false,"message": "Internal Server Error", "status": 500 })
     }
-
+    return;
 }
 
 
@@ -80,15 +83,16 @@ exports.signUpDetail = async function (req,res) {
         userProfile.updateOne({_id:ObjectId(userId)},update,{new:true},function (err,data) {
             if (!err) {
                     res.send({
-                        "message": "sign up deatils updated successfully", "status": 1, "data": {}
+                        "error":false, "message": "sign up deatils updated successfully", "status": 1, "data": {}
                     })
             } else {
-                res.send({ "message": "user not found", "status": -1, "data": {} })
+                res.send({ "error":false,"message": "user not found", "status": -1, "data": {} })
             }
         })
     } catch (e) {
-        res.send({ "message": "Internal Server Error", "status": 500 })
+        res.send({ "error":false,"message": "Internal Server Error", "status": 500 })
     }
+    return;
 }
 
 
@@ -102,13 +106,14 @@ exports.login = async function (req,res) {
             if (docs.length != 0) {
                     //console.log.log(err)
                         res.send({
-                            "message": "Otp sent successfully", "status": 1, "data": {}
+                            "error":false,"message": "Otp sent successfully", "status": 1, "data": {}
                         })
             } else {
-                res.send({ "message": "user not found with this mobile number", "status": -1, "data": {} })
+                res.send({"error":false, "message": "user not found with this mobile number", "status": -1, "data": {} })
             }
         })
     } catch (e) {
-        res.send({ "message": "Internal Server Error", "status": 500 })
+        res.send({"error":true, "message": "Internal Server Error", "status": 500 })
     }
+    return;
 }

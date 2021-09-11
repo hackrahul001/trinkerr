@@ -14,17 +14,18 @@ exports.home = async function (req, res) {
         homeData.find({}, function (er, data) {
             if (!er) {
                 res.send({
-                    "message": "ok", "status": 1, "data": data
+                    "error": false, "message": "ok", "status": 1, "data": data
                 })
             } else {
                 res.send({
-                    "message": "failed", "status": -1, "data": {}
+                    "error": true, "message": "failed", "status": 500, "data": {}
                 })
             }
         })
     } catch (e) {
-        res.send({ "message": "Internal Server Error", "status": 500 })
+        res.send({ "error": true, "message": "Internal Server Error", "status": 500 })
     }
+    return;
 }
 
 
@@ -38,15 +39,16 @@ exports.interest = async function (req, res) {
         var data = { userId: ObjectId(userId), imageId: ObjectId(imageId), interest: interest }
         interests.findOneAndUpdate(data, { $inc: { count: 1 } }, { upsert: true }, function (er, data) {
             if (!er) {
-                res.send({ "message": "ok", "status": 1, "data": {} })
+                res.send({ "error": false, "message": "ok", "status": 1, "data": {} })
             } else {
-                res.send({ "message": "failed", "status": -1, "data": {} })
+                res.send({ "error": true, "message": "failed", "status": 500, "data": {} })
             }
         })
 
     } catch (e) {
-        res.send({ "message": "Internal Server Error", "status": 500 })
+        res.send({ "error": true, "message": "Internal Server Error", "status": 500 })
     }
+    return;
 }
 
 
@@ -84,17 +86,18 @@ exports.history = async function (req, res) {
         ]).exec(function (err, data) {
             if (!err) {
                 res.send({
-                    "message": "ok", "status": 1, "data": data
+                    "error": false, "message": "ok", "status": 1, "data": data
                 })
             } else {
                 res.send({
-                    "message": "failed", "status": -1, "data": {}
+                    "error": true, "message": "failed", "status": 500, "data": {}
                 })
             }
         });
 
 
     } catch (e) {
-        res.send({ "message": "Internal Server Error", "status": 500 })
+        res.send({ "error": true, "message": "Internal Server Error", "status": 500 })
     }
+    return;
 }
