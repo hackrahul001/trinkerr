@@ -22,7 +22,6 @@ exports.home = async function (req, res) {
                 })
             }
         })
-
     } catch (e) {
         res.send({ "message": "Internal Server Error", "status": 500 })
     }
@@ -44,18 +43,6 @@ exports.interest = async function (req, res) {
                 res.send({ "message": "failed", "status": -1, "data": {} })
             }
         })
-        // const inv = new interests(data)
-        // inv.save(function (err, doc) {
-        //     if(!err){
-        //         res.send({params
-        //             "message": "ok", "status": 1, "data": data
-        //          })
-        //     }else{
-        //         res.send({
-        //             "message": "failed", "status": -1, "data": {}
-        //          })
-        //     }
-        // })
 
     } catch (e) {
         res.send({ "message": "Internal Server Error", "status": 500 })
@@ -66,58 +53,46 @@ exports.interest = async function (req, res) {
 
 exports.history = async function (req, res) {
     try {
-         const userId = req.userId
-         interests.aggregate([
-                {
-                    "$match": {"userId":ObjectId(userId)}
-                },
-             {
-              "$lookup": {
-                "from": "homes", // collection name in db
-                "localField": "imageId",
-                "foreignField": "_id",
-                "as": "history"
-             }
-           },{
-               "$project":{
-                   "_id":0,
-                   "interest":1,
-                   "count":1,
-                   "history.imageName":1,
-                   "history.imageUrl":1,
-                   "history.createdAt":1
-               }
-           },
-           {
-            "$unwind": {
-                "path": "$history",
-                "preserveNullAndEmptyArrays": true
-            }
-        },
-      ]).exec(function(err, data) {
-                if (!err) {
-                    res.send({
-                        "message": "ok", "status": 1, "data": data
-                    })
-                }else{
-                  res.send({
-                    "message": "failed", "status": -1, "data": {}
-                  })
+        const userId = req.userId
+        interests.aggregate([
+            {
+                "$match": { "userId": ObjectId(userId) }
+            },
+            {
+                "$lookup": {
+                    "from": "homes", // collection name in db
+                    "localField": "imageId",
+                    "foreignField": "_id",
+                    "as": "history"
                 }
+            }, {
+                "$project": {
+                    "_id": 0,
+                    "interest": 1,
+                    "count": 1,
+                    "history.imageName": 1,
+                    "history.imageUrl": 1,
+                    "history.createdAt": 1
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$history",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+        ]).exec(function (err, data) {
+            if (!err) {
+                res.send({
+                    "message": "ok", "status": 1, "data": data
+                })
+            } else {
+                res.send({
+                    "message": "failed", "status": -1, "data": {}
+                })
+            }
         });
 
-
-        // homeData.find({}, function (er, data) {
-        //     if (!er) {
-        //         res.send({
-        //             "message": "ok", "status": 1, "data": data
-        //         })
-        //     } else {
-        //         res.send({
-        //             "message": "failed", "status": -1, "data": {}
-        //         })
-        //     }
-        // })
 
     } catch (e) {
         res.send({ "message": "Internal Server Error", "status": 500 })
