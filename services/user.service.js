@@ -74,13 +74,13 @@ exports.otpVerification = async (req, res) => {
 exports.signUpDetail = async function (req,res) {
     if (!req.body) return res.sendStatus(400)
     try {
-        const { userId } = req.userId;
+        const  userId  = req.userId;
         const {userName} = req.body;
         const update = {userName : userName};
-        userProfile.findOneAndUpdate({_id:userId},{update},{new: true},function (err,data) {
+        userProfile.updateOne({_id:ObjectId(userId)},update,{new:true},function (err,data) {
             if (!err) {
                     res.send({
-                        "message": "sign up deatils updated successfully", "status": 1, "data": {userName:data.userName}
+                        "message": "sign up deatils updated successfully", "status": 1, "data": {}
                     })
             } else {
                 res.send({ "message": "user not found", "status": -1, "data": {} })

@@ -1,8 +1,6 @@
 
 const jwt = require('jsonwebtoken');
-const { RSP_MSG, RSP_CODE } = require('../config/response.config')
-
-
+const {APP_CONFIG} = require("../config/app.config")
 exports.auth = async (req, res, next) => {
   try {
     const authToken = req.get('x-auth');

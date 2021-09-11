@@ -1,5 +1,5 @@
 exports.initRoutes = (app) => {
-    require('./user.route').errorRoute(app)
-    require('./home.route').errorRoute(app)
+    require('./user.route').userRoute(app)
+    require('./home.route').homeRoute(app)
     
   }

@@ -9,21 +9,21 @@ const SECRET_KEY = APP_CONFIG.SECRET_KEY;
 const interests = require('../schemas/interest.schema')
 
 
-exports.home = async function(req,res){
-    try{
-        homeData.find({},function(er,data){
-            if(!err){
+exports.home = async function (req, res) {
+    try {
+        homeData.find({}, function (er, data) {
+            if (!err) {
                 res.send({
                     "message": "ok", "status": 1, "data": data
-                 })
-            }else{
+                })
+            } else {
                 res.send({
                     "message": "failed", "status": -1, "data": {}
-                 })
+                })
             }
         })
 
-    }catch(e){
+    } catch (e) {
         res.send({ "message": "Internal Server Error", "status": 500 })
     }
 }
@@ -31,18 +31,18 @@ exports.home = async function(req,res){
 
 
 
-exports.interest = async function(req,res){
+exports.interest = async function (req, res) {
     if (!req.body) return res.sendStatus(400);
-    try{
-        const {imageId,interest} = req.body;
+    try {
+        const { imageId, interest } = req.body;
         const userId = req.userId
-        var data = { userId: userId, imageId:imageId,interest:interest}
-        interests.findOneAndUpdate(data,{$inc: {count: 1}},{upsert: true},function(er,data) {
+        var data = { userId: userId, imageId: imageId, interest: interest }
+        interests.findOneAndUpdate(data, { $inc: { count: 1 } }, { upsert: true }, function (er, data) {
 
-            if(!er){
-                res.send({"message": "ok", "status": 1, "data": data})
-            }else{
-                res.send({"message": "failed", "status": -1, "data": {} })
+            if (!er) {
+                res.send({ "message": "ok", "status": 1, "data": data })
+            } else {
+                res.send({ "message": "failed", "status": -1, "data": {} })
             }
         })
         // const inv = new interests(data)
@@ -58,7 +58,7 @@ exports.interest = async function(req,res){
         //     }
         // })
 
-    }catch(e){
+    } catch (e) {
         res.send({ "message": "Internal Server Error", "status": 500 })
     }
 }

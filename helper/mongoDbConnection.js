@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-var promise = mongoose.connect("mongodb+srv://rahul:rahul@cluster0.kmaih.mongodb.net/errorLogs?retryWrites=true&w=majority", {
+var promise = mongoose.connect("mongodb+srv://rahul:rahul@cluster0.c6xbt.mongodb.net/trinkerr?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useCreateIndex: true,
     /* other options */

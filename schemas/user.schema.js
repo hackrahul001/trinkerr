@@ -5,7 +5,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var user = new Schema({
         mobileNumber : String,
-        otp : "0000",
+        otp : {
+           type:String,
+           default:"0000"
+        },
         userName : {
            type:String,
            default:""

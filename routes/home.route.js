@@ -3,7 +3,7 @@ const errorService = require('../services/home.service')
 
 
 
-exports.errorRoute = (app) => {
+exports.homeRoute = (app) => {
     // app.get('/');
    
 }
