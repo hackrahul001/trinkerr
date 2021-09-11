@@ -14,7 +14,7 @@ const appRoutes = require('./routes');
 var app = express();
 
 
-var port = 5000;
+var port = 8000;
 app.get("/",function(req,res) {
     res.send("welcome to Trinkerr.....")
 })
