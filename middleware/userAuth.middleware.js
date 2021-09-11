@@ -11,6 +11,6 @@ exports.auth = async (req, res, next) => {
     req.userId = userId
     next()
   } catch (err) {
-    res.status(RSP_CODE.token_missing).send({ message: RSP_MSG.token_missing, status: RSP_CODE.token_missing })
+    res.status(401).send({ message:"Invalid token received", status: 401 })
   }
 }
