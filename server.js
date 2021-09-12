@@ -14,7 +14,8 @@ const appRoutes = require('./routes');
 var app = express();
 
 
-var port = 8000;
+var port = process.env.PORT || 5000;
+console.log("running on port..... : ",port);
 app.get("/",function(req,res) {
     res.send("welcome to Trinkerr.....")
 })
